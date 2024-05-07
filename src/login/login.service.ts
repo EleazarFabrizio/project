@@ -1,4 +1,10 @@
 import { Injectable } from '@nestjs/common';
+import { CreateUser } from './dto/create.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from './user.entity';
+import { UpdateUserDto } from './dto/update.dto';
+import { BadRequestException } from '@nestjs/common'
 
 export interface requerido {
     id:number;
@@ -10,16 +16,29 @@ export interface requerido {
 @Injectable()
 export class LoginService {
 
-    GetUsers (){
-        return 'getting'
+    constructor(
+    @InjectRepository(User)
+    private userRepository: Repository<User>,){}
+
+    async GetOneUser(id:number): Promise<User>{
+        return await this.userRepository.findOneBy({id:id});
     }
-    UpdateUsers (){
-        return 'Actualizando usuario'
+
+    async GetAllUsers(): Promise<User[]>{
+        return await this.userRepository.find();
     }
-    LogInUsers (){
-        return 'Ingresando Usuario'
+
+    async UpdateUsers (id:number,EditedUser:UpdateUserDto){
+        await this.userRepository.update(id,EditedUser)
+
     }
-    DeleteUsers (){
-        return 'Dando de baja usuario'
+
+    async SignUpUsers (createUser : CreateUser): Promise<User>{
+        const newUser = this.userRepository.create(createUser);
+        return await this.userRepository.save(newUser);
     }
+
+    public async DeleteUsers(id: number) {
+          await this.userRepository.delete(id)
+      } 
 }

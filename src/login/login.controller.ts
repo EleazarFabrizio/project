@@ -1,30 +1,37 @@
-import { Body, Controller, Delete, Get, Post, Put } from "@nestjs/common"
+import { Body, Controller, Delete, Get, Post, Put , Param, Patch} from "@nestjs/common"
 import { LoginService } from "./login.service"
-import { User } from "./user.entity";
+import { CreateUser } from "./dto/create.dto";
+import { UpdateUserDto } from "./dto/update.dto";
 
 @Controller('/login')
 export class LoginController {
 
     constructor(private loginService: LoginService) {}
 
+
+    @Get(':id')
+    getUsers(@Param('id')id:string){
+        return this.loginService.GetOneUser(+id);
+    }
+
     @Get()
-    getUsers(){
-        return this.loginService.GetUsers();
+    getAllUsers(){
+        return this.loginService.GetAllUsers();
     }
 
     @Post()
-    createUser(@Body() user:any){
-        return this.loginService.LogInUsers();
+    createUser(@Body() createUser : CreateUser){
+        return this.loginService.SignUpUsers(createUser);
     }
 
-    @Delete()
-    deletingUser(){
-        return this.loginService.DeleteUsers;
+    @Delete(":id")
+    deletingUser(@Param('id')id:string){
+        return this.loginService.DeleteUsers(+id);
     }
 
-    @Put()
-    updateUser(){
-        return this.loginService.UpdateUsers;
+    @Patch(":id")
+    updateUser(@Param('id')id:string, @Body() updateUserDto: UpdateUserDto){
+        return this.loginService.UpdateUsers(+id,updateUserDto);
     }
 }
 

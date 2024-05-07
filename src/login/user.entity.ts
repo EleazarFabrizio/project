@@ -1,4 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { isStringObject } from 'util/types';
 
 @Entity()
 export class User {

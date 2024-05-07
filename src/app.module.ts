@@ -20,10 +20,10 @@ import { LoginModule } from './login/login.module';
       username: 'root',
       password: '',
       database: 'primer_crud',
-      entities: [User], // Add your entities (models) here
-      synchronize: true, // Automatically sync your entity schemas with the database (for development)
+      entities: [User],
+      synchronize: true,
     }),
-    // Import other modules if you have any
+    
   ],
 })
 export class AppModule {}
